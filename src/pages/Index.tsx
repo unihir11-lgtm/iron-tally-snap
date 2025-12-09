@@ -7,7 +7,7 @@ import { categories, ironItems as initialItems } from "@/data/inventory";
 import { IronItem } from "@/types/inventory";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import { Search, Factory, ClipboardList } from "lucide-react";
+import { Search, Factory, ClipboardList, PackageOpen } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -85,15 +85,26 @@ const Index = () => {
                 </p>
               </div>
             </div>
-            <Button
-              onClick={() => navigate("/material-request")}
-              variant="secondary"
-              size="sm"
-              className="flex items-center gap-2"
-            >
-              <ClipboardList className="h-4 w-4" />
-              <span className="hidden sm:inline">Material Request</span>
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                onClick={() => navigate("/inward")}
+                variant="secondary"
+                size="sm"
+                className="flex items-center gap-2"
+              >
+                <PackageOpen className="h-4 w-4" />
+                <span className="hidden sm:inline">Inward</span>
+              </Button>
+              <Button
+                onClick={() => navigate("/material-request")}
+                variant="secondary"
+                size="sm"
+                className="flex items-center gap-2"
+              >
+                <ClipboardList className="h-4 w-4" />
+                <span className="hidden sm:inline">Material Request</span>
+              </Button>
+            </div>
           </div>
 
           {/* Search Bar */}
