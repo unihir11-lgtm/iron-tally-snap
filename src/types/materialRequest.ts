@@ -10,6 +10,8 @@ export interface MaterialRequestItem {
 
 export interface MaterialRequest {
   id: string;
+  siteId: string;
+  siteName: string;
   items: MaterialRequestItem[];
   createdAt: Date;
   status: "pending" | "approved" | "rejected";

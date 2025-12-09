@@ -4,19 +4,34 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowLeft, Plus, Minus, Search, X } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ArrowLeft, Plus, Minus, Search, X, MapPin } from "lucide-react";
 import { ironItems } from "@/data/inventory";
 import { IronItem } from "@/types/inventory";
 import { MaterialRequestItem } from "@/types/materialRequest";
 import { toast } from "@/hooks/use-toast";
 
+const sites = [
+  { id: "site-1", name: "Site A - Main Factory" },
+  { id: "site-2", name: "Site B - Warehouse" },
+  { id: "site-3", name: "Site C - Assembly Unit" },
+  { id: "site-4", name: "Site D - Storage Yard" },
+];
+
 interface MaterialRequestFormProps {
-  onSubmit: (items: MaterialRequestItem[]) => void;
+  onSubmit: (items: MaterialRequestItem[], site: string) => void;
   onBack: () => void;
 }
 
 export function MaterialRequestForm({ onSubmit, onBack }: MaterialRequestFormProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedSite, setSelectedSite] = useState("");
   const [selectedItems, setSelectedItems] = useState<Map<string, MaterialRequestItem>>(new Map());
   const [showSearch, setShowSearch] = useState(false);
 
@@ -73,6 +88,14 @@ export function MaterialRequestForm({ onSubmit, onBack }: MaterialRequestFormPro
   };
 
   const handleSubmit = () => {
+    if (!selectedSite) {
+      toast({
+        title: "No site selected",
+        description: "Please select a site",
+        variant: "destructive",
+      });
+      return;
+    }
     if (selectedItems.size === 0) {
       toast({
         title: "No items selected",
@@ -81,10 +104,11 @@ export function MaterialRequestForm({ onSubmit, onBack }: MaterialRequestFormPro
       });
       return;
     }
-    onSubmit(Array.from(selectedItems.values()));
+    const siteName = sites.find(s => s.id === selectedSite)?.name || selectedSite;
+    onSubmit(Array.from(selectedItems.values()), selectedSite);
     toast({
       title: "Request submitted",
-      description: `${selectedItems.size} item(s) added to request list`,
+      description: `${selectedItems.size} item(s) for ${siteName}`,
     });
   };
 
@@ -103,6 +127,26 @@ export function MaterialRequestForm({ onSubmit, onBack }: MaterialRequestFormPro
         <h1 className="text-xl sm:text-2xl font-bold text-foreground">
           Material Request Form
         </h1>
+      </div>
+
+      {/* Site Selection Dropdown */}
+      <div className="mb-4 sm:mb-6">
+        <label className="block text-sm font-medium text-foreground mb-2">
+          <MapPin className="inline h-4 w-4 mr-1" />
+          Select Site
+        </label>
+        <Select value={selectedSite} onValueChange={setSelectedSite}>
+          <SelectTrigger className="w-full bg-card border-border">
+            <SelectValue placeholder="Choose a site..." />
+          </SelectTrigger>
+          <SelectContent className="bg-card border-border z-50">
+            {sites.map((site) => (
+              <SelectItem key={site.id} value={site.id}>
+                {site.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Add Items Button & Search */}
