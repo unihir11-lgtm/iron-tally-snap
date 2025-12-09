@@ -1,5 +1,4 @@
 import { IronItem } from "@/types/inventory";
-import { Button } from "@/components/ui/button";
 
 interface ItemCardProps {
   item: IronItem;
@@ -11,7 +10,10 @@ export function ItemCard({ item, onSelect }: ItemCardProps) {
   const isComplete = totalCounted === item.batchSize;
 
   return (
-    <div className="bg-card rounded-xl shadow-card overflow-hidden transition-all duration-300 hover:shadow-elevated hover:-translate-y-1 animate-fade-in">
+    <div 
+      className="bg-card rounded-xl shadow-card overflow-hidden transition-all duration-300 hover:shadow-elevated hover:-translate-y-1 animate-fade-in cursor-pointer"
+      onClick={() => onSelect(item)}
+    >
       <div className="relative aspect-square overflow-hidden bg-muted">
         <img
           src={item.image}
@@ -32,11 +34,7 @@ export function ItemCard({ item, onSelect }: ItemCardProps) {
 
       <div className="p-3 md:p-4">
         <h3 className="font-bold text-foreground text-sm md:text-base mb-0.5 md:mb-1 line-clamp-1">{item.name}</h3>
-        <p className="text-muted-foreground text-xs md:text-sm mb-3 md:mb-4 line-clamp-1">{item.description}</p>
-
-        <Button onClick={() => onSelect(item)} className="w-full text-xs md:text-sm" size="sm">
-          Inspect
-        </Button>
+        <p className="text-muted-foreground text-xs md:text-sm line-clamp-1">{item.description}</p>
       </div>
     </div>
   );
