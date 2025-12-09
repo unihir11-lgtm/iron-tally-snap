@@ -1,13 +1,16 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { CategorySidebar } from "@/components/CategorySidebar";
 import { ItemCard } from "@/components/ItemCard";
 import { InspectionForm } from "@/components/InspectionForm";
 import { categories, ironItems as initialItems } from "@/data/inventory";
 import { IronItem } from "@/types/inventory";
 import { toast } from "@/hooks/use-toast";
-import { Search, Factory } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Search, Factory, ClipboardList } from "lucide-react";
 
 const Index = () => {
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [items, setItems] = useState<IronItem[]>(initialItems);
   const [selectedItem, setSelectedItem] = useState<IronItem | null>(null);
@@ -70,16 +73,27 @@ const Index = () => {
       <div className="flex-1 flex flex-col min-h-screen md:ml-0">
         {/* Header */}
         <header className="gradient-hero text-primary-foreground p-4 md:p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-secondary rounded-xl flex items-center justify-center shadow-lg">
-              <Factory className="text-secondary-foreground" size={24} />
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-secondary rounded-xl flex items-center justify-center shadow-lg">
+                <Factory className="text-secondary-foreground" size={24} />
+              </div>
+              <div>
+                <h1 className="text-lg md:text-2xl font-bold">Iron Factory</h1>
+                <p className="text-primary-foreground/80 text-xs md:text-sm">
+                  Quality Control System
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-lg md:text-2xl font-bold">Iron Factory</h1>
-              <p className="text-primary-foreground/80 text-xs md:text-sm">
-                Quality Control System
-              </p>
-            </div>
+            <Button
+              onClick={() => navigate("/material-request")}
+              variant="secondary"
+              size="sm"
+              className="flex items-center gap-2"
+            >
+              <ClipboardList className="h-4 w-4" />
+              <span className="hidden sm:inline">Material Request</span>
+            </Button>
           </div>
 
           {/* Search Bar */}
