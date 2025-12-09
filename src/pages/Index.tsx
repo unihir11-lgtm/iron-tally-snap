@@ -67,7 +67,7 @@ const Index = () => {
         onSelectCategory={setSelectedCategory}
       />
 
-      <div className="flex-1 flex flex-col min-h-screen">
+      <div className="flex-1 flex flex-col min-h-screen md:ml-0">
         {/* Header */}
         <header className="gradient-hero text-primary-foreground p-4 md:p-6">
           <div className="flex items-center gap-3 mb-4">
@@ -75,8 +75,8 @@ const Index = () => {
               <Factory className="text-secondary-foreground" size={24} />
             </div>
             <div>
-              <h1 className="text-xl md:text-2xl font-bold">Iron Factory</h1>
-              <p className="text-primary-foreground/80 text-sm">
+              <h1 className="text-lg md:text-2xl font-bold">Iron Factory</h1>
+              <p className="text-primary-foreground/80 text-xs md:text-sm">
                 Quality Control System
               </p>
             </div>
@@ -86,32 +86,32 @@ const Index = () => {
           <div className="relative">
             <Search
               className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground"
-              size={20}
+              size={18}
             />
             <input
               type="text"
               placeholder="Search items..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-12 pl-12 pr-4 rounded-xl bg-card text-foreground placeholder:text-muted-foreground shadow-md focus:outline-none focus:ring-2 focus:ring-secondary"
+              className="w-full h-11 md:h-12 pl-11 pr-4 rounded-xl bg-card text-foreground placeholder:text-muted-foreground shadow-md focus:outline-none focus:ring-2 focus:ring-secondary text-sm md:text-base"
             />
           </div>
         </header>
 
         {/* Stats Bar */}
-        <div className="bg-card border-b border-border p-4">
-          <div className="flex gap-4 overflow-x-auto pb-2">
-            <div className="flex items-center gap-2 bg-muted px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap">
-              <span className="text-muted-foreground">Total Items:</span>
+        <div className="bg-card border-b border-border p-3 md:p-4">
+          <div className="flex gap-2 md:gap-4 overflow-x-auto pb-1">
+            <div className="flex items-center gap-1.5 md:gap-2 bg-muted px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-medium whitespace-nowrap">
+              <span className="text-muted-foreground">Total:</span>
               <span className="text-foreground font-bold">{items.length}</span>
             </div>
-            <div className="flex items-center gap-2 bg-success/10 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap">
+            <div className="flex items-center gap-1.5 md:gap-2 bg-success/10 px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-medium whitespace-nowrap">
               <span className="text-success">Good:</span>
               <span className="text-success font-bold">
                 {items.reduce((acc, item) => acc + item.goodCount, 0)}
               </span>
             </div>
-            <div className="flex items-center gap-2 bg-destructive/10 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap">
+            <div className="flex items-center gap-1.5 md:gap-2 bg-destructive/10 px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-medium whitespace-nowrap">
               <span className="text-destructive">Broken:</span>
               <span className="text-destructive font-bold">
                 {items.reduce((acc, item) => acc + item.brokenCount, 0)}
@@ -121,8 +121,8 @@ const Index = () => {
         </div>
 
         {/* Main Content */}
-        <main className="flex-1 p-4 md:p-6 overflow-y-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+        <main className="flex-1 p-3 md:p-6 overflow-y-auto pb-20 md:pb-6">
+          <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6">
             {filteredItems.map((item) => (
               <ItemCard key={item.id} item={item} onSelect={handleSelectItem} />
             ))}
@@ -130,11 +130,11 @@ const Index = () => {
 
           {filteredItems.length === 0 && (
             <div className="flex flex-col items-center justify-center py-16 text-center">
-              <div className="text-6xl mb-4">🔍</div>
-              <h3 className="text-xl font-bold text-foreground mb-2">
+              <div className="text-5xl md:text-6xl mb-4">🔍</div>
+              <h3 className="text-lg md:text-xl font-bold text-foreground mb-2">
                 No items found
               </h3>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground text-sm md:text-base">
                 Try a different category or search term
               </p>
             </div>
