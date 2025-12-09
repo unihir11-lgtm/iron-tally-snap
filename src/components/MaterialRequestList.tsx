@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Trash2, Clock, CheckCircle, XCircle } from "lucide-react";
+import { ArrowLeft, Trash2, Clock, CheckCircle, XCircle, MapPin } from "lucide-react";
 import { MaterialRequest } from "@/types/materialRequest";
 import { format } from "date-fns";
 
@@ -65,7 +65,11 @@ export function MaterialRequestList({ requests, onBack, onDelete }: MaterialRequ
             <Card key={request.id} className="p-3 sm:p-4 bg-card border-border">
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <p className="text-xs sm:text-sm text-muted-foreground">
+                  <div className="flex items-center gap-1 text-xs sm:text-sm text-primary mb-1">
+                    <MapPin className="h-3 w-3" />
+                    <span className="font-medium">{request.siteName}</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
                     {format(new Date(request.createdAt), "MMM dd, yyyy HH:mm")}
                   </p>
                   <p className="font-semibold text-foreground">

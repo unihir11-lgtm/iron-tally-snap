@@ -19,9 +19,17 @@ export default function MaterialRequestPage() {
   const [currentView, setCurrentView] = useState<View>("menu");
   const [requests, setRequests] = useState<MaterialRequest[]>([]);
 
-  const handleSubmitRequest = (items: MaterialRequestItem[]) => {
+  const handleSubmitRequest = (items: MaterialRequestItem[], siteId: string) => {
+    const sites: Record<string, string> = {
+      "site-1": "Site A - Main Factory",
+      "site-2": "Site B - Warehouse",
+      "site-3": "Site C - Assembly Unit",
+      "site-4": "Site D - Storage Yard",
+    };
     const newRequest: MaterialRequest = {
       id: crypto.randomUUID(),
+      siteId,
+      siteName: sites[siteId] || siteId,
       items,
       createdAt: new Date(),
       status: "pending",
