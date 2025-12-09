@@ -11,6 +11,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { ArrowLeft, Plus, Minus, Search, X, MapPin } from "lucide-react";
 import { ironItems } from "@/data/inventory";
 import { IronItem } from "@/types/inventory";
@@ -25,7 +35,7 @@ const sites = [
 ];
 
 interface MaterialRequestFormProps {
-  onSubmit: (items: MaterialRequestItem[], site: string) => void;
+  onSubmit: (items: MaterialRequestItem[], site: string, remarks: string) => void;
   onBack: () => void;
 }
 
@@ -34,6 +44,8 @@ export function MaterialRequestForm({ onSubmit, onBack }: MaterialRequestFormPro
   const [selectedSite, setSelectedSite] = useState("");
   const [selectedItems, setSelectedItems] = useState<Map<string, MaterialRequestItem>>(new Map());
   const [showSearch, setShowSearch] = useState(false);
+  const [remarks, setRemarks] = useState("");
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
   const filteredItems = ironItems.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -49,7 +61,6 @@ export function MaterialRequestForm({ onSubmit, onBack }: MaterialRequestFormPro
         itemImage: item.image,
         goodQuantity: 0,
         badQuantity: 0,
-        remarks: "",
       });
     } else {
       newSelected.delete(item.id);
@@ -71,15 +82,6 @@ export function MaterialRequestForm({ onSubmit, onBack }: MaterialRequestFormPro
     }
   };
 
-  const updateRemarks = (itemId: string, remarks: string) => {
-    const newSelected = new Map(selectedItems);
-    const item = newSelected.get(itemId);
-    if (item) {
-      item.remarks = remarks;
-      newSelected.set(itemId, { ...item });
-      setSelectedItems(newSelected);
-    }
-  };
 
   const removeItem = (itemId: string) => {
     const newSelected = new Map(selectedItems);
@@ -87,7 +89,7 @@ export function MaterialRequestForm({ onSubmit, onBack }: MaterialRequestFormPro
     setSelectedItems(newSelected);
   };
 
-  const handleSubmit = () => {
+  const handleSubmitClick = () => {
     if (!selectedSite) {
       toast({
         title: "No site selected",
@@ -104,12 +106,17 @@ export function MaterialRequestForm({ onSubmit, onBack }: MaterialRequestFormPro
       });
       return;
     }
+    setShowConfirmDialog(true);
+  };
+
+  const handleConfirmSubmit = () => {
     const siteName = sites.find(s => s.id === selectedSite)?.name || selectedSite;
-    onSubmit(Array.from(selectedItems.values()), selectedSite);
+    onSubmit(Array.from(selectedItems.values()), selectedSite, remarks);
     toast({
       title: "Request submitted",
       description: `${selectedItems.size} item(s) for ${siteName}`,
     });
+    setShowConfirmDialog(false);
   };
 
   return (
@@ -293,16 +300,24 @@ export function MaterialRequestForm({ onSubmit, onBack }: MaterialRequestFormPro
                 </div>
               </div>
 
-              {/* Remarks */}
-              <Textarea
-                placeholder="Add remarks..."
-                value={item.remarks}
-                onChange={(e) => updateRemarks(item.itemId, e.target.value)}
-                className="text-sm"
-                rows={2}
-              />
             </Card>
           ))}
+        </div>
+      )}
+
+      {/* Remarks */}
+      {selectedItems.size > 0 && (
+        <div className="mb-4 sm:mb-6">
+          <label className="block text-sm font-medium text-foreground mb-2">
+            Remarks (Optional)
+          </label>
+          <Textarea
+            placeholder="Add remarks for this request..."
+            value={remarks}
+            onChange={(e) => setRemarks(e.target.value)}
+            className="text-sm"
+            rows={3}
+          />
         </div>
       )}
 
@@ -311,10 +326,26 @@ export function MaterialRequestForm({ onSubmit, onBack }: MaterialRequestFormPro
         <Button variant="outline" onClick={onBack} className="flex-1">
           Cancel
         </Button>
-        <Button onClick={handleSubmit} className="flex-1" disabled={selectedItems.size === 0}>
+        <Button onClick={handleSubmitClick} className="flex-1" disabled={selectedItems.size === 0}>
           Submit Request
         </Button>
       </div>
+
+      {/* Confirmation Dialog */}
+      <AlertDialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              You are about to submit a material request with {selectedItems.size} item(s).
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>No</AlertDialogCancel>
+            <AlertDialogAction onClick={handleConfirmSubmit}>Yes</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

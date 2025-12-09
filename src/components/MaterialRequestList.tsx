@@ -7,11 +7,10 @@ import { format } from "date-fns";
 
 interface MaterialRequestListProps {
   requests: MaterialRequest[];
-  onBack: () => void;
   onDelete: (id: string) => void;
 }
 
-export function MaterialRequestList({ requests, onBack, onDelete }: MaterialRequestListProps) {
+export function MaterialRequestList({ requests, onDelete }: MaterialRequestListProps) {
   const getStatusBadge = (status: MaterialRequest["status"]) => {
     switch (status) {
       case "pending":
@@ -39,21 +38,7 @@ export function MaterialRequestList({ requests, onBack, onDelete }: MaterialRequ
   };
 
   return (
-    <div className="min-h-screen bg-background p-3 sm:p-6">
-      {/* Header */}
-      <div className="flex items-center gap-3 mb-4 sm:mb-6">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onBack}
-          className="h-10 w-10 sm:h-12 sm:w-12"
-        >
-          <ArrowLeft className="h-5 w-5 sm:h-6 sm:w-6" />
-        </Button>
-        <h1 className="text-xl sm:text-2xl font-bold text-foreground">
-          Material Requests
-        </h1>
-      </div>
+    <div>
 
       {requests.length === 0 ? (
         <Card className="p-8 text-center bg-card border-border">
@@ -113,15 +98,17 @@ export function MaterialRequestList({ requests, onBack, onDelete }: MaterialRequ
                           Bad: {item.badQuantity}
                         </span>
                       </div>
-                      {item.remarks && (
-                        <p className="text-xs text-muted-foreground truncate mt-1">
-                          {item.remarks}
-                        </p>
-                      )}
                     </div>
                   </div>
                 ))}
               </div>
+              {request.remarks && (
+                <div className="mt-3 pt-3 border-t border-border">
+                  <p className="text-xs text-muted-foreground">
+                    <span className="font-medium">Remarks:</span> {request.remarks}
+                  </p>
+                </div>
+              )}
             </Card>
           ))}
         </div>

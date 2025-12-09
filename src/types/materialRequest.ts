@@ -5,7 +5,6 @@ export interface MaterialRequestItem {
   itemImage: string;
   goodQuantity: number;
   badQuantity: number;
-  remarks: string;
 }
 
 export interface MaterialRequest {
@@ -13,6 +12,7 @@ export interface MaterialRequest {
   siteId: string;
   siteName: string;
   items: MaterialRequestItem[];
+  remarks: string;
   createdAt: Date;
   status: "pending" | "approved" | "rejected";
 }
