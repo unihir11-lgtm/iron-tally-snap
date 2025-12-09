@@ -22,7 +22,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { ArrowLeft, Plus, Minus, Search, X, MapPin } from "lucide-react";
-import { ironItems } from "@/data/inventory";
+import { ironItems, categories } from "@/data/inventory";
 import { IronItem } from "@/types/inventory";
 import { MaterialRequestItem } from "@/types/materialRequest";
 import { toast } from "@/hooks/use-toast";
@@ -54,10 +54,13 @@ export function MaterialRequestForm({ onSubmit, onBack }: MaterialRequestFormPro
   const handleSelectItem = (item: IronItem, checked: boolean) => {
     const newSelected = new Map(selectedItems);
     if (checked) {
+      const category = categories.find(c => c.id === item.category);
       newSelected.set(item.id, {
         id: crypto.randomUUID(),
         itemId: item.id,
         itemName: item.name,
+        itemDescription: item.description,
+        itemGroup: category?.name || item.category,
         itemImage: item.image,
         goodQuantity: 0,
         badQuantity: 0,
@@ -179,27 +182,38 @@ export function MaterialRequestForm({ onSubmit, onBack }: MaterialRequestFormPro
               />
             </div>
             <div className="max-h-60 overflow-y-auto space-y-2">
-              {filteredItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors"
-                >
-                  <Checkbox
-                    checked={selectedItems.has(item.id)}
-                    onCheckedChange={(checked) =>
-                      handleSelectItem(item, checked as boolean)
-                    }
-                  />
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-10 h-10 sm:w-12 sm:h-12 rounded object-cover"
-                  />
-                  <span className="text-sm sm:text-base font-medium text-foreground flex-1">
-                    {item.name}
-                  </span>
-                </div>
-              ))}
+              {filteredItems.map((item) => {
+                const category = categories.find(c => c.id === item.category);
+                return (
+                  <div
+                    key={item.id}
+                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors"
+                  >
+                    <Checkbox
+                      checked={selectedItems.has(item.id)}
+                      onCheckedChange={(checked) =>
+                        handleSelectItem(item, checked as boolean)
+                      }
+                    />
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-10 h-10 sm:w-12 sm:h-12 rounded object-cover"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <span className="text-sm sm:text-base font-medium text-foreground block truncate">
+                        {item.name}
+                      </span>
+                      <p className="text-xs text-muted-foreground line-clamp-2">
+                        {item.description}
+                      </p>
+                      <span className="text-xs text-primary font-medium">
+                        {category?.name || item.category}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
               {filteredItems.length === 0 && (
                 <p className="text-center text-muted-foreground py-4">
                   No items found
@@ -224,16 +238,24 @@ export function MaterialRequestForm({ onSubmit, onBack }: MaterialRequestFormPro
                   alt={item.itemName}
                   className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg object-cover"
                 />
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between">
-                    <h3 className="font-semibold text-foreground text-sm sm:text-base">
-                      {item.itemName}
-                    </h3>
+                    <div>
+                      <h3 className="font-semibold text-foreground text-sm sm:text-base">
+                        {item.itemName}
+                      </h3>
+                      <p className="text-xs text-muted-foreground line-clamp-2 mt-1">
+                        {item.itemDescription}
+                      </p>
+                      <span className="text-xs text-primary font-medium">
+                        {item.itemGroup}
+                      </span>
+                    </div>
                     <Button
                       variant="ghost"
                       size="icon"
                       onClick={() => removeItem(item.itemId)}
-                      className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                      className="h-8 w-8 text-muted-foreground hover:text-destructive flex-shrink-0"
                     >
                       <X className="h-4 w-4" />
                     </Button>
