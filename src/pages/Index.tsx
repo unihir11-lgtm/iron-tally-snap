@@ -87,15 +87,6 @@ const Index = () => {
             </div>
             <div className="flex items-center gap-2">
               <Button
-                onClick={() => navigate("/inward")}
-                variant="secondary"
-                size="sm"
-                className="flex items-center gap-2"
-              >
-                <PackageOpen className="h-4 w-4" />
-                <span className="hidden sm:inline">Inward</span>
-              </Button>
-              <Button
                 onClick={() => navigate("/material-request")}
                 variant="secondary"
                 size="sm"
@@ -103,6 +94,15 @@ const Index = () => {
               >
                 <ClipboardList className="h-4 w-4" />
                 <span className="hidden sm:inline">Material Request</span>
+              </Button>
+              <Button
+                onClick={() => navigate("/inward")}
+                variant="secondary"
+                size="sm"
+                className="flex items-center gap-2"
+              >
+                <PackageOpen className="h-4 w-4" />
+                <span className="hidden sm:inline">Inward</span>
               </Button>
             </div>
           </div>
@@ -122,28 +122,6 @@ const Index = () => {
             />
           </div>
         </header>
-
-        {/* Stats Bar */}
-        <div className="bg-card border-b border-border p-3 md:p-4">
-          <div className="flex gap-2 md:gap-4 overflow-x-auto pb-1">
-            <div className="flex items-center gap-1.5 md:gap-2 bg-muted px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-medium whitespace-nowrap">
-              <span className="text-muted-foreground">Total:</span>
-              <span className="text-foreground font-bold">{items.length}</span>
-            </div>
-            <div className="flex items-center gap-1.5 md:gap-2 bg-success/10 px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-medium whitespace-nowrap">
-              <span className="text-success">Good:</span>
-              <span className="text-success font-bold">
-                {items.reduce((acc, item) => acc + item.goodCount, 0)}
-              </span>
-            </div>
-            <div className="flex items-center gap-1.5 md:gap-2 bg-destructive/10 px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-medium whitespace-nowrap">
-              <span className="text-destructive">Broken:</span>
-              <span className="text-destructive font-bold">
-                {items.reduce((acc, item) => acc + item.brokenCount, 0)}
-              </span>
-            </div>
-          </div>
-        </div>
 
         {/* Main Content */}
         <main className="flex-1 p-3 md:p-6 overflow-y-auto pb-20 md:pb-6">
